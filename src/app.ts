@@ -3,8 +3,10 @@ import helmet from "@fastify/helmet";
 import rateLimiter from "@fastify/rate-limit";
 import swagger from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
+import cors from "@fastify/cors";
 import helmetConfig from "@/config/helmet.config";
 import rateLimiterConfig from "@/config/rate-limit.config";
+import corsConfig from "@/config/cors.config";
 import { swaggerConfig, swaggerUIConfig } from "@/config/swagger.config";
 
 import healthRoute from "@/routes/health.route";
@@ -31,6 +33,7 @@ async function createServer() {
     const app = Fastify({ logger: false });
     await app.register(helmet, helmetConfig);
     await app.register(rateLimiter, rateLimiterConfig);
+    await app.register(cors, corsConfig);
     if (process.env.IS_LOCAL === "true") {
         await app.register(swagger, swaggerConfig);
         await app.register(swaggerUi, swaggerUIConfig);
