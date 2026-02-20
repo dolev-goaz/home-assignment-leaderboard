@@ -13,6 +13,8 @@ export const connection = new DataSource({
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
 
+    entities: ["src/services/database/entities/*.entity.{ts,js}"],
+
     migrations: [],
     synchronize: true, // in real production code we would use migrations instead
     namingStrategy: new SnakeNamingStrategy(),
