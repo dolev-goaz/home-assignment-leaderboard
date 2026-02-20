@@ -1,14 +1,6 @@
-type UserID = string;
-interface User {
-    id: UserID;
-    name: string;
-    score: number;
-}
-interface PositionedUser extends User {
-    rank: number;
-    above: User[];
-    below: User[];
-}
+import { CreateUser, UpdateUser } from "@/dal/user";
+import type { User, PositionedUser, UserID } from "@/types/user";
+
 interface ILeaderboardManager {
     addUser(userId: UserID, score: number): Promise<void>;
     updateUserScore(userId: UserID, newScore: number): Promise<void>;
@@ -17,10 +9,18 @@ interface ILeaderboardManager {
 }
 class LeaderboardManager implements ILeaderboardManager {
     async addUser(userName: string, score: number) {
-        throw new Error("Method not implemented.");
+        await CreateUser.createUser({
+            name: userName,
+            score,
+        });
+        // TODO: store in internal data structure
     }
     async updateUserScore(userId: UserID, newScore: number) {
-        throw new Error("Method not implemented.");
+        await UpdateUser.updateUserScore({
+            id: userId,
+            score: newScore,
+        });
+        // TODO: update internal data structure
     }
     getTopUsers(n: number): User[] {
         throw new Error("Method not implemented.");
