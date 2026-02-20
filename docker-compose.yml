@@ -1,45 +1,45 @@
 services:
-  app:
-    build: .
-    ports:
-      - "${APP_PORT:-3000}:3000"
-    env_file:
-      - .env
-    depends_on:
-      - postgres
-      - redis
+    app:
+        build: .
+        ports:
+            - "${APP_PORT:-3000}:3000"
+        env_file:
+            - .env
+        depends_on:
+            - postgres
+            - redis
 
-  postgres:
-    image: postgres:17-alpine
-    environment:
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "${DB_PORT:-5432}:5432"
+    postgres:
+        image: postgres:17-alpine
+        environment:
+            POSTGRES_USER: ${DB_USERNAME}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+            POSTGRES_DB: ${DB_NAME}
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        ports:
+            - "${DB_PORT:-5432}:5432"
 
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
-    ports:
-      - "${PGADMIN_PORT:-5050}:80"
-    volumes:
-      - ./docker_volumes/pgadmin_servers.json:/pgadmin4/servers.json
+    pgadmin:
+        image: dpage/pgadmin4:latest
+        environment:
+            PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+            PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+        ports:
+            - "${PGADMIN_PORT:-5050}:80"
+        volumes:
+            - ./docker_volumes/pgadmin_servers.json:/pgadmin4/servers.json
 
-    depends_on:
-      - postgres
+        depends_on:
+            - postgres
 
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
+    redis:
+        image: redis:7-alpine
+        ports:
+            - "6379:6379"
+        volumes:
+            - redis_data:/data
 
 volumes:
-  postgres_data:
-  redis_data:
+    postgres_data:
+    redis_data:
