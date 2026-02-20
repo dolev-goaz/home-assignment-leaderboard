@@ -3,25 +3,35 @@ import type { User, PositionedUser, UserID } from "@/types/user";
 import { logger } from "@/services/logging";
 
 interface ILeaderboardManager {
-    addUser(userId: UserID, score: number): Promise<void>;
-    updateUserScore(userId: UserID, newScore: number): Promise<void>;
+    addUser(userId: UserID, score: number): Promise<User>;
+    updateUserScore(userId: UserID, newScore: number): Promise<User>;
     getTopUsers(n: number): User[];
     getUserPosition(userId: UserID): PositionedUser | null;
 }
 class LeaderboardManager implements ILeaderboardManager {
     async addUser(userName: string, score: number) {
-        await CreateUser.createUser({
+        const user = await CreateUser.createUser({
             name: userName,
             score,
         });
         // TODO: store in internal data structure
+        return {
+            id: user.userId,
+            name: user.name,
+            score: user.score,
+        };
     }
     async updateUserScore(userId: UserID, newScore: number) {
-        await UpdateUser.updateUserScore({
+        const user = await UpdateUser.updateUserScore({
             id: userId,
             score: newScore,
         });
         // TODO: update internal data structure
+        return {
+            id: user.userId,
+            name: user.name,
+            score: user.score,
+        };
     }
     getTopUsers(n: number): User[] {
         throw new Error("Method not implemented.");

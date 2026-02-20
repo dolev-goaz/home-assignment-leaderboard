@@ -75,13 +75,15 @@ const route: FastifyPluginAsyncTypebox = async (app) => {
     app.post("/user", { schema: schemas.addUser }, async (req, reply) => {
         logger.info("Add user endpoint called");
         const { name, score } = req.body;
-        await getLeaderboardManager().addUser(name, score);
+        const user = await getLeaderboardManager().addUser(name, score);
+        reply.status(StatusCodes.CREATED).send(user);
     });
     app.put("/user/:userId/score", { schema: schemas.updateUserScore }, async (req, reply) => {
         logger.info("Update user score endpoint called");
         const { userId } = req.params;
         const { score } = req.body;
-        await getLeaderboardManager().updateUserScore(userId, score);
+        const user = await getLeaderboardManager().updateUserScore(userId, score);
+        return user;
     });
     app.get("/top-users", { schema: schemas.getTopUsers }, async (req, reply) => {
         logger.info("Get top users endpoint called");
