@@ -1,5 +1,6 @@
 import { CreateUser, UpdateUser } from "@/dal/user";
 import type { User, PositionedUser, UserID } from "@/types/user";
+import { logger } from "@/services/logging";
 
 interface ILeaderboardManager {
     addUser(userId: UserID, score: number): Promise<void>;
@@ -30,4 +31,16 @@ class LeaderboardManager implements ILeaderboardManager {
     }
 }
 
-export const leaderboardManager = new LeaderboardManager();
+let leaderboardManager: ILeaderboardManager;
+
+export function initializeLeaderboardManager() {
+    logger.child({ service: "leaderboard" }).info("Initializing leaderboard manager");
+    leaderboardManager = new LeaderboardManager();
+}
+
+export function getLeaderboardManager() {
+    if (!leaderboardManager) {
+        throw new Error("Leaderboard manager not initialized");
+    }
+    return leaderboardManager;
+}

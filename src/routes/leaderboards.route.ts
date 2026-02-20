@@ -11,7 +11,10 @@ import {
     UserSchema,
     PositionedUserSchema,
 } from "@/schemas/user.schema";
-import { leaderboardManager } from "@/route-services/leaderboards.service";
+import {
+    initializeLeaderboardManager,
+    getLeaderboardManager,
+} from "@/route-services/leaderboards.service";
 
 const tags = ["Leaderboards"];
 
@@ -68,27 +71,28 @@ const schemas = {
 // TODO: should convert output to DTOs
 const route: FastifyPluginAsyncTypebox = async (app) => {
     const logger = baseLogger.child({ route: "leaderboards" });
+    initializeLeaderboardManager();
     app.post("/user", { schema: schemas.addUser }, async (req, reply) => {
         logger.info("Add user endpoint called");
         const { name, score } = req.body;
-        await leaderboardManager.addUser(name, score);
+        await getLeaderboardManager().addUser(name, score);
     });
     app.put("/user/:userId/score", { schema: schemas.updateUserScore }, async (req, reply) => {
         logger.info("Update user score endpoint called");
         const { userId } = req.params;
         const { score } = req.body;
-        await leaderboardManager.updateUserScore(userId, score);
+        await getLeaderboardManager().updateUserScore(userId, score);
     });
     app.get("/top-users", { schema: schemas.getTopUsers }, async (req, reply) => {
         logger.info("Get top users endpoint called");
         const { limit = 10 } = req.query;
-        const topUsers = leaderboardManager.getTopUsers(limit);
+        const topUsers = getLeaderboardManager().getTopUsers(limit);
         return topUsers;
     });
     app.get("/user/:userId/position", { schema: schemas.getUserPosition }, async (req, reply) => {
         logger.info("Get user position endpoint called");
         const { userId } = req.params;
-        const userPosition = leaderboardManager.getUserPosition(userId);
+        const userPosition = getLeaderboardManager().getUserPosition(userId);
         if (!userPosition) {
             throw new ApiError(StatusCodes.NOT_FOUND, "User not found");
         }
