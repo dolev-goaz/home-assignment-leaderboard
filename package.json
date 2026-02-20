@@ -1,0 +1,22 @@
+{
+  "name": "leaderboard-api",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc && tsc-alias",
+    "preview": "node dist/index.js",
+    "start": "tsx watch src/index.ts"
+  },
+  "dependencies": {
+    "dotenv": "^17.3.1",
+    "fastify": "^5.2.0",
+    "winston": "^3.17.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "tsc-alias": "^1.8.10",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}
