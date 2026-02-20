@@ -7,6 +7,8 @@ import helmetConfig from "@/config/helmet.config";
 import rateLimiterConfig from "@/config/rate-limit.config";
 import { swaggerConfig, swaggerUIConfig } from "@/config/swagger.config";
 
+import healthRoute from "@/routes/health.route";
+
 import { errorHandler } from "@/errors/ErrorHandler.error";
 import { errorHookhandler } from "@/errors/ErrorHookHandler.error";
 
@@ -42,10 +44,8 @@ async function createServer() {
     // ======= routes =======
     await app.register(
         (instance, _opts, next) => {
-            instance.get("/health", async () => {
-                logger.child({ route: "health" }).info("Health check endpoint called");
-                return { status: "ok" };
-            });
+            instance.register(healthRoute, { prefix: "/health" });
+
             next();
         },
         { prefix: "/api/v1" },

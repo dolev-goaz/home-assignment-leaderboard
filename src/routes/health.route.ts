@@ -13,7 +13,7 @@ const schemas = {
 
 const route: FastifyPluginAsyncTypebox = async (app) => {
     const logger = baseLogger.child({ route: "health" });
-    app.get("/health", { schema: schemas.health }, async () => {
+    app.get("/", { schema: schemas.health }, async () => {
         logger.info("Health check endpoint called");
         return { status: "ok" };
     });
