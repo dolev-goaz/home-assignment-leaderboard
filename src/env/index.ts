@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { logger } from "@/logging";
+import { logger } from "@/services/logging";
 
 const envVariables = z.object({
   NODE_ENV: z.enum(["dev", "prod"]).optional().default("dev"),

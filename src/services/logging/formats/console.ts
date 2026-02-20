@@ -31,8 +31,19 @@ const logFormat = printf(({ level, message, timestamp, ...args }) => {
   );
   return components.join(" ");
 });
-export const ConsoleFormat = combine(
+
+const joinedFormat = combine(
   colorize(),
   timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
   logFormat,
 );
+const filterDatabaseOperations = winston.format((info) => {
+  // Skip database operation logs
+  if (info?.utilityService === "database-operations") {
+    return false;
+  }
+  return info;
+});
+
+// ignore database operations logs in development
+export const ConsoleFormat = combine(filterDatabaseOperations(), joinedFormat);

@@ -10,6 +10,9 @@
   "dependencies": {
     "dotenv": "^17.3.1",
     "fastify": "^5.2.0",
+    "pg": "^8.18.0",
+    "typeorm": "^0.3.28",
+    "typeorm-naming-strategies": "^4.1.0",
     "winston": "^3.17.0",
     "zod": "^4.3.6"
   },
