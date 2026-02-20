@@ -8,6 +8,7 @@ import rateLimiterConfig from "@/config/rate-limit.config";
 import { swaggerConfig, swaggerUIConfig } from "@/config/swagger.config";
 
 import healthRoute from "@/routes/health.route";
+import leaderboardsRoute from "@/routes/leaderboards.route";
 
 import { errorHandler } from "@/errors/ErrorHandler.error";
 import { errorHookhandler } from "@/errors/ErrorHookHandler.error";
@@ -45,6 +46,7 @@ async function createServer() {
     await app.register(
         (instance, _opts, next) => {
             instance.register(healthRoute, { prefix: "/health" });
+            instance.register(leaderboardsRoute, { prefix: "/leaderboards" });
 
             next();
         },
