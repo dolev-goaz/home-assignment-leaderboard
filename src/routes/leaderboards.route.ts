@@ -4,7 +4,14 @@ import { Type } from "@sinclair/typebox";
 import { logger as baseLogger } from "@/services/logging";
 import { ApiError } from "@/errors/ApiError.error";
 import StatusCodes from "http-status-codes";
-import { CreateUserSchema, UserIdSchema, UserScoreSchema } from "@/schemas/user.schema";
+import {
+    CreateUserSchema,
+    UserIdSchema,
+    UserScoreSchema,
+    UserSchema,
+    PositionedUserSchema,
+} from "@/schemas/user.schema";
+import { leaderboardManager } from "@/route-services/leaderboards.service";
 
 const tags = ["Leaderboards"];
 
@@ -16,17 +23,27 @@ const topUserFetchParamSchema = Type.Integer({
 const userIdParamSchema = Type.Object({
     userId: UserIdSchema,
 });
+
+const userScoreBodySchema = Type.Object({
+    score: UserScoreSchema,
+});
 const schemas = {
     addUser: {
         tags,
         description: "Add a new user with a score",
         body: CreateUserSchema,
+        response: {
+            [StatusCodes.CREATED]: UserSchema,
+        },
     },
     updateUserScore: {
         tags,
         description: "Update a user's score",
         params: userIdParamSchema,
-        body: UserScoreSchema,
+        body: userScoreBodySchema,
+        response: {
+            [StatusCodes.OK]: UserSchema,
+        },
     },
     getTopUsers: {
         tags,
@@ -34,31 +51,48 @@ const schemas = {
         querystring: Type.Object({
             limit: Type.Optional(topUserFetchParamSchema),
         }),
+        response: {
+            [StatusCodes.OK]: Type.Array(UserSchema),
+        },
     },
     getUserPosition: {
         tags,
         description: "Get a user's current position on the leaderboard",
         params: userIdParamSchema,
+        response: {
+            [StatusCodes.OK]: PositionedUserSchema,
+        },
     },
 } satisfies Record<string, FastifySchema>;
 
+// TODO: should convert output to DTOs
 const route: FastifyPluginAsyncTypebox = async (app) => {
     const logger = baseLogger.child({ route: "leaderboards" });
     app.post("/user", { schema: schemas.addUser }, async (req, reply) => {
         logger.info("Add user endpoint called");
-        throw new ApiError(StatusCodes.NOT_IMPLEMENTED, "Not implemented");
+        const { name, score } = req.body;
+        await leaderboardManager.addUser(name, score);
     });
     app.put("/user/:userId/score", { schema: schemas.updateUserScore }, async (req, reply) => {
         logger.info("Update user score endpoint called");
-        throw new ApiError(StatusCodes.NOT_IMPLEMENTED, "Not implemented");
+        const { userId } = req.params;
+        const { score } = req.body;
+        await leaderboardManager.updateUserScore(userId, score);
     });
     app.get("/top-users", { schema: schemas.getTopUsers }, async (req, reply) => {
         logger.info("Get top users endpoint called");
-        throw new ApiError(StatusCodes.NOT_IMPLEMENTED, "Not implemented");
+        const { limit = 10 } = req.query;
+        const topUsers = leaderboardManager.getTopUsers(limit);
+        return topUsers;
     });
     app.get("/user/:userId/position", { schema: schemas.getUserPosition }, async (req, reply) => {
         logger.info("Get user position endpoint called");
-        throw new ApiError(StatusCodes.NOT_IMPLEMENTED, "Not implemented");
+        const { userId } = req.params;
+        const userPosition = leaderboardManager.getUserPosition(userId);
+        if (!userPosition) {
+            throw new ApiError(StatusCodes.NOT_FOUND, "User not found");
+        }
+        return userPosition;
     });
 };
 

@@ -13,6 +13,10 @@ export const UserScoreSchema = Type.Integer({
     minimum: 0,
     description: "The total score of the user",
 });
+export const UserRankSchema = Type.Integer({
+    minimum: 1,
+    description: "The user's current rank on the leaderboard",
+});
 
 export const CreateUserSchema = Type.Object(
     {
@@ -20,4 +24,28 @@ export const CreateUserSchema = Type.Object(
         score: UserScoreSchema,
     },
     { description: "Schema for creating a new user with a name and score" },
+);
+
+export const UserSchema = Type.Object(
+    {
+        id: UserIdSchema,
+        name: UserNameSchema,
+        score: UserScoreSchema,
+    },
+    { description: "Schema representing a user with an ID, name, and score" },
+);
+
+export const PositionedUserSchema = Type.Intersect(
+    [
+        UserSchema,
+        Type.Object({
+            rank: UserRankSchema,
+            above: Type.Array(UserSchema, { description: "List of users ranked above this user" }),
+            below: Type.Array(UserSchema, { description: "List of users ranked below this user" }),
+        }),
+    ],
+    {
+        description:
+            "Schema representing a user along with their position and surrounding users on the leaderboard",
+    },
 );
