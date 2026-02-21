@@ -83,3 +83,13 @@ This ensures durability while maintaining fast reads from memory.
 
 Due to time constraints, I did not implement the Redis cachine layer, nor did I implement locks around the skip list.
 In a production system, we would need to consider concurrency control for the skip list, especially if we expect high write throughput.
+
+## Architecture
+
+### Architecture for current implementation-
+
+![Current Architecture](./architecture/current.png)
+
+### Architecture for ideal implementation with Redis as the data-store-
+
+![Ideal Architecture](./architecture/ideal.png)
