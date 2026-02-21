@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
         "target": "ES2022",
-        "module": "ESNext",
-        "moduleResolution": "bundler",
+        "module": "CommonJS",
+        "moduleResolution": "Node",
         "outDir": "./dist",
         "rootDir": "./src",
         "strict": true,
@@ -10,16 +10,11 @@
         "skipLibCheck": true,
         "baseUrl": ".",
         "paths": {
-            "@/*": [
-                "src/*"
-            ]
+            "@/*": ["src/*"]
         },
-        // typeorm
-        "experimentalDecorators": true /* Enable experimental support for legacy experimental decorators. */,
-        "emitDecoratorMetadata": true /* Emit design-type metadata for decorated declarations in source files. */,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
         "strictPropertyInitialization": false
     },
-    "include": [
-        "src/**/*"
-    ]
+    "include": ["src/**/*"]
 }

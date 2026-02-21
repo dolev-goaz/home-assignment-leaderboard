@@ -1,6 +1,7 @@
 import { DataSource } from "typeorm";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 import { DatabaseOperationsLogger } from "@/services/logging/typeorm-loggers";
+import { User } from "./entities/User.entity";
 import dotenv from "dotenv";
 dotenv.config({ quiet: true });
 
@@ -13,10 +14,10 @@ export const connection = new DataSource({
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
 
-    entities: ["src/services/database/entities/*.entity.{ts,js}"],
+    entities: [User],
 
     migrations: [],
-    synchronize: true, // in real production code we would use migrations instead
+    synchronize: true,
     namingStrategy: new SnakeNamingStrategy(),
     logging: true,
     logger: new DatabaseOperationsLogger(),

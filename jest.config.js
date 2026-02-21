@@ -1,5 +1,5 @@
 /** @type {import('ts-jest').JestConfigWithTsJest} */
-export default {
+module.exports = {
     testEnvironment: "node",
     roots: ["<rootDir>/src"],
     testMatch: ["**/*.test.ts"],
@@ -11,11 +11,10 @@ export default {
         "^.+\\.ts$": [
             "ts-jest",
             {
-                useESM: true,
                 tsconfig: {
                     target: "ES2022",
-                    module: "ESNext",
-                    moduleResolution: "bundler",
+                    module: "CommonJS",
+                    moduleResolution: "Node",
                     baseUrl: ".",
                     paths: {
                         "@/*": ["src/*"],
