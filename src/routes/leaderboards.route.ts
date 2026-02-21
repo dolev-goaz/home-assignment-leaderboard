@@ -8,7 +8,7 @@ import {
     CreateUserSchema,
     UserIdSchema,
     UserScoreSchema,
-    UserSchema,
+    UserDTOSchema,
     PositionedUserSchema,
 } from "@/schemas/user.schema";
 import {
@@ -36,7 +36,7 @@ const schemas = {
         description: "Add a new user with a score",
         body: CreateUserSchema,
         response: {
-            [StatusCodes.CREATED]: UserSchema,
+            [StatusCodes.CREATED]: UserDTOSchema,
         },
     },
     updateUserScore: {
@@ -45,7 +45,7 @@ const schemas = {
         params: userIdParamSchema,
         body: userScoreBodySchema,
         response: {
-            [StatusCodes.OK]: UserSchema,
+            [StatusCodes.OK]: UserDTOSchema,
         },
     },
     getTopUsers: {
@@ -55,7 +55,7 @@ const schemas = {
             limit: Type.Optional(topUserFetchParamSchema),
         }),
         response: {
-            [StatusCodes.OK]: Type.Array(UserSchema),
+            [StatusCodes.OK]: Type.Array(UserDTOSchema),
         },
     },
     getUserPosition: {

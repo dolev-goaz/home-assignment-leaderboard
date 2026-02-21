@@ -26,7 +26,7 @@ export const CreateUserSchema = Type.Object(
     { description: "Schema for creating a new user with a name and score" },
 );
 
-export const UserSchema = Type.Object(
+export const UserDTOSchema = Type.Object(
     {
         id: UserIdSchema,
         name: UserNameSchema,
@@ -37,11 +37,15 @@ export const UserSchema = Type.Object(
 
 export const PositionedUserSchema = Type.Intersect(
     [
-        UserSchema,
+        UserDTOSchema,
         Type.Object({
             rank: UserRankSchema,
-            above: Type.Array(UserSchema, { description: "List of users ranked above this user" }),
-            below: Type.Array(UserSchema, { description: "List of users ranked below this user" }),
+            above: Type.Array(UserDTOSchema, {
+                description: "List of users ranked above this user",
+            }),
+            below: Type.Array(UserDTOSchema, {
+                description: "List of users ranked below this user",
+            }),
         }),
     ],
     {
