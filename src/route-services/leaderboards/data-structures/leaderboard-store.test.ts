@@ -1,5 +1,5 @@
 import { LeaderboardStore } from "./leaderboard-store";
-import { User as UserEntity } from "@/services/database/entities/User.entity";
+import type { User } from "@/types/user";
 
 describe("LeaderboardStore", () => {
     let store: LeaderboardStore;
@@ -182,10 +182,10 @@ describe("LeaderboardStore", () => {
     describe("loadUsers", () => {
         it("should load multiple users from database format", () => {
             const users = [
-                { userId: "user1", name: "Alice", score: 100 },
-                { userId: "user2", name: "Bob", score: 200 },
-                { userId: "user3", name: "Charlie", score: 50 },
-            ] as UserEntity[];
+                { id: "user1", name: "Alice", score: 100 },
+                { id: "user2", name: "Bob", score: 200 },
+                { id: "user3", name: "Charlie", score: 50 },
+            ] satisfies User[];
 
             store.loadUsers(users);
 
@@ -205,10 +205,10 @@ describe("LeaderboardStore", () => {
 
         it("should handle large batch load", () => {
             const users = Array.from({ length: 1000 }, (_, i) => ({
-                userId: `user${i}`,
+                id: `user${i}`,
                 name: `User${i}`,
                 score: Math.floor(Math.random() * 10000),
-            })) as UserEntity[];
+            })) satisfies User[];
 
             store.loadUsers(users);
 
