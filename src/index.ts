@@ -2,13 +2,26 @@ import { verifyEnvVariables } from "./env";
 import { startServer } from "./app";
 import { initializeDBConnection } from "./services/database";
 import { logger } from "@/services/logging";
+import {
+    initializeLeaderboardManager,
+    getLeaderboardManager,
+} from "@/route-services/leaderboards.service";
+import { ReadUser } from "@/dal/user";
+import { userToDTO } from "@/dto/user";
 
 import dotenv from "dotenv";
 dotenv.config({ quiet: true });
 
+async function loadExistingUsers() {
+    const users = await ReadUser.getAllUsers();
+    const usersDTO = users.map(userToDTO);
+    getLeaderboardManager().loadUsers(usersDTO);
+}
+
 async function setup() {
     verifyEnvVariables();
-    await Promise.all([initializeDBConnection(), startServer()]);
+    initializeLeaderboardManager();
+    await Promise.all([startServer(), initializeDBConnection().then(loadExistingUsers)]);
 }
 
 setup().catch((err) => {
