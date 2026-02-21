@@ -157,3 +157,4 @@ GET /api/v1/health
 ## Documentation
 
 - [Design Choices](./DESIGN_CHOICES.md) - Data structure and schema decisions
+- [Skip List Analysis](./docs/skip-list-analysis.md) - Performance benchmarks
