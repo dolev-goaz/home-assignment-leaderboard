@@ -68,7 +68,6 @@ const schemas = {
     },
 } satisfies Record<string, FastifySchema>;
 
-// TODO: should convert output to DTOs
 const route: FastifyPluginAsyncTypebox = async (app) => {
     const logger = baseLogger.child({ route: "leaderboards" });
     initializeLeaderboardManager();
