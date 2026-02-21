@@ -3,6 +3,7 @@ export default {
     testEnvironment: "node",
     roots: ["<rootDir>/src"],
     testMatch: ["**/*.test.ts"],
+    setupFilesAfterEnv: ["<rootDir>/src/__mocks__/logging.mock.ts"],
     moduleNameMapper: {
         "^@/(.*)$": "<rootDir>/src/$1",
     },

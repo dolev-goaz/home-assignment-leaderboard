@@ -80,3 +80,5 @@ export async function startServer() {
         throw err;
     }
 }
+
+export { createServer };
