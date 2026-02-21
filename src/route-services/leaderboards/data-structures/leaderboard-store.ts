@@ -1,6 +1,5 @@
 import type { User, PositionedUser, UserID } from "@/types/user";
 import { SkipList } from "./skip-list";
-import { User as UserEntity } from "@/services/database/entities/User.entity";
 
 interface LeaderboardEntry {
     id: string;
@@ -59,9 +58,9 @@ export class LeaderboardStore {
         };
     }
 
-    loadUsers(users: UserEntity[]): void {
+    loadUsers(users: User[]): void {
         for (const user of users) {
-            this.addUser(user.userId, user.name, user.score);
+            this.addUser(user.id, user.name, user.score);
         }
     }
 
